@@ -203,4 +203,55 @@ public class symbolicTasha : MonoBehaviour
 			currentTable = Array.IndexOf(trueConditions, true);
 		}
 	}
+
+	// Twitch Plays
+	#pragma warning disable 414
+    private readonly string TwitchHelpMessage = "Use !{0} press [pink/blue/green/yellow] to press buttons. You can also use the first letters, or positions.";
+    #pragma warning disable 414
+    IEnumerator ProcessTwitchCommand(string cmd)
+    {
+        string[] acceptableWords = { "top", "right", "bottom", "left", "pink", "green", "yellow", "blue", "p", "g", "y", "b" };
+        if (cmd.ToLowerInvariant().StartsWith("press "))
+        {
+            string btns = cmd.Substring(6).ToLowerInvariant();
+            string[] btnSequence = btns.Split(' ');
+
+            if (btnSequence.Length > 5)
+            {
+                yield return "sendtochaterror That's more than 5 buttons :/";
+                yield break;
+            }
+            for (int i = 0; i < btnSequence.Length; i++)
+            {
+                if (!acceptableWords.Contains(btnSequence[i]))
+                {
+                    yield return "sendtochaterror One of those buttons isn't a valid button...";
+                    yield break;
+                }
+            }
+            yield return null;
+            for (int i = 0; i < btnSequence.Length; i++)
+            {
+                if (btnSequence[i].Equals("top"))
+                    buttons[0].OnInteract();
+                else if (btnSequence[i].Equals("right"))
+                    buttons[1].OnInteract();
+                else if (btnSequence[i].Equals("bottom"))
+                    buttons[2].OnInteract();
+                else if (btnSequence[i].Equals("left"))
+                    buttons[3].OnInteract();
+                else if (btnSequence[i].Equals("pink") || btnSequence[i].Equals("p"))
+                    buttons[Array.IndexOf(buttonColors, 0)].OnInteract();
+                else if (btnSequence[i].Equals("green") || btnSequence[i].Equals("g"))
+                    buttons[Array.IndexOf(buttonColors, 1)].OnInteract();
+                else if (btnSequence[i].Equals("yellow") || btnSequence[i].Equals("y"))
+                    buttons[Array.IndexOf(buttonColors, 2)].OnInteract();
+                else if (btnSequence[i].Equals("blue") || btnSequence[i].Equals("b"))
+                    buttons[Array.IndexOf(buttonColors, 3)].OnInteract();
+                yield return new WaitForSeconds(0.1f);
+            }
+        }
+        else
+            yield break;
+    }
 }

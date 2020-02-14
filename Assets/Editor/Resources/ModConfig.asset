@@ -13,20 +13,10 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   id: symbolicTasha
   title: Symbolic Tasha
-  description: 'Why does Simon get to have all of the fun? Once Tasha starts squealing,
-    everyone else is shocked!
-
-    Manual by Pruz. Implemented by EpicToast.
-
-
-    Module ID: tashaSqueals
-
-
-    Manuals:
-
-    HTML: https://ktane.timwi.de/HTML/Tasha%20Squeals.html
-
-    PDF: https://ktane.timwi.de/PDF/Tasha%20Squeals.pdf'
+  description: "This module is so worn down. It\u2019s forgotten because no one recalls
+    of who Tasha is. Let\u2019s hope we don\u2019t have to repair the glass.\r\n\r\nModule
+    idea by Pruz, implementation by TasThing.\r\n\r\nManual HTML: https://ktane.timwi.de/HTML/Symbolic%20Tasha.html\r\nManual
+    PDF: https://ktane.timwi.de/PDF/Symbolic%20Tasha.pdf"
   version: 
   outputFolder: build
-  previewImage: {fileID: 2800000, guid: 1cc0caed44e49474e85db21caba157a2, type: 3}
+  previewImage: {fileID: 2800000, guid: 9585341756ee8914796d13fdaee369f4, type: 3}
