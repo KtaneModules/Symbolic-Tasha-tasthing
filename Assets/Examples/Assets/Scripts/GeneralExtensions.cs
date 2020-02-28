@@ -242,4 +242,17 @@ public static class GeneralExtensions
         return source.OrderBy(x => UnityEngine.Random.value);
     }
 
+    public static int IndexOf<T>(this IEnumerable<T> source, Func<T, bool> predicate)
+    {
+        if (source == null)
+            throw new ArgumentNullException("source");
+        var i = 0;
+        foreach (var elem in source)
+        {
+            if (predicate(elem))
+                return i;
+            i++;
+        }
+        return -1;
+    }
 }

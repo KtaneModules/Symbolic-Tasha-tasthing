@@ -22,17 +22,16 @@ public class symbolicTasha : MonoBehaviour
 
     private int[] flashing = new int[5];
     private stSymbol[] presentSymbols = new stSymbol[4];
-    private List<int> solution = new List<int>();
+    private List<stColor> solution = new List<stColor>();
     private int stage;
     private int enteringStage;
-    private int[] buttonColors = new int[4] { 0, 1, 2, 3 };
+    private stColor[] buttonColors = new stColor[4] { stColor.pink, stColor.green, stColor.yellow, stColor.blue };
     private bool[] trueConditions = new bool[4] { false, false, false, true };
     private int currentTable;
     private bool[] cracked = new bool[4];
 
     private string[] soundNames = new string[4] { "High", "NotAsHigh", "NotAsHighAsNotAsHigh", "NotHigh" };
     private static readonly string[] positionNames = new string[4] { "top", "right", "bottom", "left" };
-    private static readonly string[] colorNames = new string[4] { "pink", "green", "yellow", "blue" };
     private bool anyBtnPressed;
     private bool[] flashingButtons = new bool[4];
 
@@ -61,21 +60,20 @@ public class symbolicTasha : MonoBehaviour
         soundNames = soundNames.Shuffle().ToArray();
         for (int i = 0; i < 4; i++)
         {
-            Debug.LogFormat("[Symbolic Tasha #{0}] The {1} button is {2}.", moduleId, positionNames[i], colorNames[buttonColors[i]]);
-            btnRenderers[i].material.color = materialColors[buttonColors[i]];
-            lights[i].color = materialColors[buttonColors[i]];
-            presentSymbols[i] = (stSymbol)rnd.Range(1, 19);
-            buttonSymbols[i].material.mainTexture = symbols[(int)presentSymbols[i] - 1];
+            Debug.LogFormat("[Symbolic Tasha #{0}] The {1} button is {2}.", moduleId, positionNames[i], buttonColors[i]);
+            btnRenderers[i].material.color = materialColors[(int) buttonColors[i]];
+            lights[i].color = materialColors[(int) buttonColors[i]];
+            presentSymbols[i] = (stSymbol) rnd.Range(1, 19);
+            buttonSymbols[i].material.mainTexture = symbols[(int) presentSymbols[i] - 1];
         }
         string[] ordinals = new string[5] { "first", "second", "third", "fourth", "fifth" };
         for (int i = 0; i < 5; i++)
         {
             flashing[i] = rnd.Range(0, 4);
-            Debug.LogFormat("[Symbolic Tasha #{0}] The {1} flashing color in the sequence is {2}.", moduleId, ordinals[i], colorNames[flashing[i]]);
+            Debug.LogFormat("[Symbolic Tasha #{0}] The {1} flashing color in the sequence is {2}.", moduleId, ordinals[i], flashing[i]);
         }
         solution.Add(CalculateStage());
-        //Debug.LogFormat("[Symbolic Tasha #{0}] ix = {1}.", moduleId, Array.IndexOf(Tables.symbolColumns[currentTable], Tables.symbolColumns[currentTable].Where(a => a.Contains(presentSymbols[Array.IndexOf(buttonColors, flashing[stage])])).First()));
-        Debug.LogFormat("[Symbolic Tasha #{0}] The first color to press is {1}.", moduleId, colorNames[solution[0]]);
+        Debug.LogFormat("[Symbolic Tasha #{0}] The first color to press is {1}.", moduleId, solution[0]);
         StartCoroutine(SequenceFlash());
     }
 
@@ -89,12 +87,12 @@ public class symbolicTasha : MonoBehaviour
         if (!cracked[ix])
         {
             cracked[ix] = true;
-            presentSymbols[ix] = (stSymbol)(-(int)presentSymbols[ix]);
+            presentSymbols[ix] = (stSymbol) (-(int) presentSymbols[ix]);
             btnRenderers[ix].material.mainTexture = crackedTexture;
             buttonSymbols[ix].gameObject.SetActive(false);
             audio.PlaySoundAtTransform("shatter", button.transform);
             if (!moduleSolved)
-                Debug.LogFormat("[Symbolic Tasha #{0}] The {1} button cracked!", moduleId, colorNames[buttonColors[ix]]);
+                Debug.LogFormat("[Symbolic Tasha #{0}] The {1} button cracked!", moduleId, buttonColors[ix]);
         }
         if (moduleSolved)
             return;
@@ -105,23 +103,23 @@ public class symbolicTasha : MonoBehaviour
                 l.enabled = false;
         }
         StartCoroutine(SingleFlash(ix));
-        Debug.LogFormat("[Symbolic Tasha #{0}] {1}", moduleId, ix);
         if (buttonColors[ix] != solution[enteringStage])
         {
             enteringStage = 0;
-            Debug.LogFormat("[Symbolic Tasha #{0}] You pressed the {1} button. That was incorrect. Strike!", moduleId, colorNames[buttonColors[ix]]);
-            StartCoroutine(Strike());
+            Debug.LogFormat("[Symbolic Tasha #{0}] You pressed the {1} button. That was incorrect. Strike!", moduleId, buttonColors[ix]);
+            module.HandleStrike();
+            StartCoroutine(SequenceFlash());
         }
         else
             enteringStage++;
         if (enteringStage > stage)
         {
             enteringStage = 0;
-            StartCoroutine(AdvanceStage());
+            AdvanceStage();
         }
     }
 
-    IEnumerator AdvanceStage()
+    void AdvanceStage()
     {
         stage++;
         if (stage == 5)
@@ -132,21 +130,10 @@ public class symbolicTasha : MonoBehaviour
         }
         else
         {
-            while (flashingButtons.Contains(true))
-                yield return null;
             solution.Add(CalculateStage());
             StartCoroutine(SequenceFlash());
-            Debug.LogFormat("[Symbolic Tasha #{0}] {1} was added to the sequence of colors to press.", moduleId, colorNames[solution[stage]]);
+            Debug.LogFormat("[Symbolic Tasha #{0}] {1} was added to the sequence of colors to press.", moduleId, solution[stage]);
         }
-    }
-
-    IEnumerator Strike()
-    {
-        module.HandleStrike();
-        enteringStage = 0;
-        while (flashingButtons.Contains(true))
-            yield return null;
-        StartCoroutine(SequenceFlash());
     }
 
     IEnumerator SingleFlash(int ix)
@@ -178,14 +165,14 @@ public class symbolicTasha : MonoBehaviour
         goto sequenceReset;
     }
 
-    int CalculateStage()
+    stColor CalculateStage()
     {
         if (Tables.symbolColumns[currentTable].Count(a => a.Contains(presentSymbols[Array.IndexOf(buttonColors, flashing[stage])])) == 0)
-            return 0;
+            return stColor.pink;
         else
         {
-            var ix = Array.IndexOf(Tables.symbolColumns[currentTable], Tables.symbolColumns[currentTable].Where(a => a.Contains(presentSymbols[Array.IndexOf(buttonColors, flashing[stage])])).First());
-            return (int)Tables.colorRows[currentTable][flashing[stage]][ix];
+            var ix = Tables.symbolColumns[currentTable].IndexOf(a => a.Contains(presentSymbols[Array.IndexOf(buttonColors, flashing[stage])]));
+            return Tables.colorRows[currentTable][flashing[stage]][ix];
         }
     }
 
