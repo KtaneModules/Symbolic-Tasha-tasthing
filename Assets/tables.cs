@@ -112,6 +112,7 @@ public static class Tables
             new stSymbol[] { stSymbol.triangleCracked, stSymbol.compassCracked }
         },
     };
+
     // ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
     public static readonly stColor[][][] colorRows = new stColor[4][][]

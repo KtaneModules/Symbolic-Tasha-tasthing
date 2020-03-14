@@ -61,17 +61,15 @@ public class symbolicTasha : MonoBehaviour
         soundNames = soundNames.Shuffle().ToArray();
         for (int i = 0; i < 4; i++)
         {
-            btnRenderers[i].material.color = materialColors[(int) buttonColors[i]];
-            lights[i].color = materialColors[(int) buttonColors[i]];
-            presentSymbols[i] = (stSymbol) rnd.Range(1, 19);
-            buttonSymbols[i].material.mainTexture = symbols[(int) presentSymbols[i] - 1];
+            btnRenderers[i].material.color = materialColors[(int)buttonColors[i]];
+            lights[i].color = materialColors[(int)buttonColors[i]];
+            presentSymbols[i] = (stSymbol)rnd.Range(1, 19);
+            buttonSymbols[i].material.mainTexture = symbols[(int)presentSymbols[i] - 1];
             Debug.LogFormat("[Symbolic Tasha #{0}] The {1} button is {2}, with the symbol titled '{3}'.", moduleId, positionNames[i], buttonColors[i], presentSymbols[i]);
         }
         string[] ordinals = new string[5] { "First", "Second", "Third", "Fourth", "Fifth" };
         for (int i = 0; i < 5; i++)
-        {
             flashing[i] = rnd.Range(0, 4);
-        }
         Debug.LogFormat("[Symbolic Tasha #{0}] Flashing Colors: {1}: {2} | {3}: {4} | {5}: {6} | {7}: {8} | {9}: {10}", moduleId, ordinals[0], buttonColors[flashing[0]], ordinals[1], buttonColors[flashing[1]], ordinals[2], buttonColors[flashing[2]], ordinals[3], buttonColors[flashing[3]], ordinals[4], buttonColors[flashing[4]]);
         solution.Add(CalculateStage());
         Debug.LogFormat("[Symbolic Tasha #{0}] The first color to press is {1}.", moduleId, solution[0]);
@@ -88,7 +86,7 @@ public class symbolicTasha : MonoBehaviour
         if (!cracked[ix])
         {
             cracked[ix] = true;
-            presentSymbols[ix] = (stSymbol) (-(int) presentSymbols[ix]);
+            presentSymbols[ix] = (stSymbol)(-(int)presentSymbols[ix]);
             btnRenderers[ix].material.mainTexture = crackedTexture;
             buttonSymbols[ix].gameObject.SetActive(false);
             audio.PlaySoundAtTransform("shatter", button.transform);
@@ -181,22 +179,12 @@ public class symbolicTasha : MonoBehaviour
 
     stColor CalculateStage()
     {
-        Debug.LogFormat("[Symbolic Tasha #{0}] Rule being applied for Stage {1}: {2} ", moduleId, stage+1, rules[currentTable]);
+        Debug.LogFormat("[Symbolic Tasha #{0}] Rule being applied for Stage {1}: {2} ", moduleId, stage + 1, rules[currentTable]);
         stSymbol usingSymbol = presentSymbols[flashing[stage]];
-
-        for (var i = 0; i < 12; i++)
-        {
+        for (int i = 0; i < 12; i++)
             if (Tables.symbolColumns[currentTable][i].Contains(usingSymbol))
-            {
                 return Tables.colorRows[currentTable][Array.IndexOf(trueColors, buttonColors[flashing[stage]])][i];
-            }
-        }
         return stColor.pink;
-    }
-
-    void Update()
-    {
-
     }
 
     // Twitch Plays
