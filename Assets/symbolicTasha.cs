@@ -36,6 +36,7 @@ public class symbolicTasha : MonoBehaviour
     private static readonly string[] positionNames = new string[4] { "top", "right", "bottom", "left" };
     private bool anyBtnPressed;
     private bool[] flashingButtons = new bool[4];
+    private Coroutine sequenceFlashing;
 
     private static int moduleIdCounter = 1;
     private int moduleId;
@@ -74,7 +75,7 @@ public class symbolicTasha : MonoBehaviour
         Debug.LogFormat("[Symbolic Tasha #{0}] Flashing Colors: {1}: {2} | {3}: {4} | {5}: {6} | {7}: {8} | {9}: {10}", moduleId, ordinals[0], buttonColors[flashing[0]], ordinals[1], buttonColors[flashing[1]], ordinals[2], buttonColors[flashing[2]], ordinals[3], buttonColors[flashing[3]], ordinals[4], buttonColors[flashing[4]]);
         solution.Add(CalculateStage());
         Debug.LogFormat("[Symbolic Tasha #{0}] The first color to press is {1}.", moduleId, solution[0]);
-        StartCoroutine(SequenceFlash());
+        sequenceFlashing = StartCoroutine(SequenceFlash());
     }
 
     void ButtonPress(KMSelectable button)
@@ -98,7 +99,7 @@ public class symbolicTasha : MonoBehaviour
             return;
         if (enteringStage == 0)
         {
-            StopAllCoroutines();
+            StopCoroutine(sequenceFlashing);
             foreach (Light l in lights)
                 l.enabled = false;
         }
@@ -108,7 +109,7 @@ public class symbolicTasha : MonoBehaviour
             enteringStage = 0;
             Debug.LogFormat("[Symbolic Tasha #{0}] You pressed the {1} button. That was incorrect. Strike!", moduleId, buttonColors[ix]);
             module.HandleStrike();
-            StartCoroutine(SequenceFlash());
+            sequenceFlashing = StartCoroutine(SequenceFlash());
         }
         else
             enteringStage++;
@@ -144,7 +145,7 @@ public class symbolicTasha : MonoBehaviour
         else
         {
             solution.Add(CalculateStage());
-            StartCoroutine(SequenceFlash());
+            sequenceFlashing = StartCoroutine(SequenceFlash());
             Debug.LogFormat("[Symbolic Tasha #{0}] {1} was added to the sequence of colors to press.", moduleId, solution[stage]);
         }
     }

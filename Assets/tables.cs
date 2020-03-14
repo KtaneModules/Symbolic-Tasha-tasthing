@@ -109,7 +109,7 @@ public static class Tables
             new stSymbol[] { stSymbol.hookCracked, stSymbol.yankeeCracked },
             new stSymbol[] { stSymbol.kiloCracked, stSymbol.shelfCracked },
             new stSymbol[] { stSymbol.fire, stSymbol.angle },
-            new stSymbol[] { stSymbol.triangleCracked, stSymbol.compass }
+            new stSymbol[] { stSymbol.triangleCracked, stSymbol.compassCracked }
         },
     };
     // ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
