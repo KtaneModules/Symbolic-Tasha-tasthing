@@ -23,12 +23,14 @@ public class symbolicTasha : MonoBehaviour
     private int[] flashing = new int[5];
     private stSymbol[] presentSymbols = new stSymbol[4];
     private List<stColor> solution = new List<stColor>();
-    private int stage;
+    private int stage = 0;
     private int enteringStage;
+    private stColor[] trueColors = new stColor[4] { stColor.pink, stColor.green, stColor.yellow, stColor.blue };
     private stColor[] buttonColors = new stColor[4] { stColor.pink, stColor.green, stColor.yellow, stColor.blue };
     private bool[] trueConditions = new bool[4] { false, false, false, true };
-    private int currentTable;
+    private int currentTable = 0;
     private bool[] cracked = new bool[4];
+    private string[] rules = new string[4] { "Stage 1 or more than 2 strikes", "At least 2 cracked buttons", "Empty Port Plate", "None of the above" };
 
     private string[] soundNames = new string[4] { "High", "NotAsHigh", "NotAsHighAsNotAsHigh", "NotHigh" };
     private static readonly string[] positionNames = new string[4] { "top", "right", "bottom", "left" };
@@ -49,8 +51,6 @@ public class symbolicTasha : MonoBehaviour
 
     void Start()
     {
-        if (bomb.GetPortPlates().Any(x => x.Length == 0))
-            trueConditions[2] = true;
         float scalar = transform.lossyScale.x;
         for (int i = 0; i < 4; i++)
         {
@@ -61,18 +61,18 @@ public class symbolicTasha : MonoBehaviour
         soundNames = soundNames.Shuffle().ToArray();
         for (int i = 0; i < 4; i++)
         {
-            Debug.LogFormat("[Symbolic Tasha #{0}] The {1} button is {2}.", moduleId, positionNames[i], buttonColors[i]);
             btnRenderers[i].material.color = materialColors[(int) buttonColors[i]];
             lights[i].color = materialColors[(int) buttonColors[i]];
             presentSymbols[i] = (stSymbol) rnd.Range(1, 19);
             buttonSymbols[i].material.mainTexture = symbols[(int) presentSymbols[i] - 1];
+            Debug.LogFormat("[Symbolic Tasha #{0}] The {1} button is {2}, with the symbol titled '{3}'.", moduleId, positionNames[i], buttonColors[i], presentSymbols[i]);
         }
-        string[] ordinals = new string[5] { "first", "second", "third", "fourth", "fifth" };
+        string[] ordinals = new string[5] { "First", "Second", "Third", "Fourth", "Fifth" };
         for (int i = 0; i < 5; i++)
         {
             flashing[i] = rnd.Range(0, 4);
-            Debug.LogFormat("[Symbolic Tasha #{0}] The {1} flashing color in the sequence is {2}.", moduleId, ordinals[i], flashing[i]);
         }
+        Debug.LogFormat("[Symbolic Tasha #{0}] Flashing Colors: {1}: {2} | {3}: {4} | {5}: {6} | {7}: {8} | {9}: {10}", moduleId, ordinals[0], buttonColors[flashing[0]], ordinals[1], buttonColors[flashing[1]], ordinals[2], buttonColors[flashing[2]], ordinals[3], buttonColors[flashing[3]], ordinals[4], buttonColors[flashing[4]]);
         solution.Add(CalculateStage());
         Debug.LogFormat("[Symbolic Tasha #{0}] The first color to press is {1}.", moduleId, solution[0]);
         sequenceFlashing = StartCoroutine(SequenceFlash());
@@ -123,6 +123,19 @@ public class symbolicTasha : MonoBehaviour
     void AdvanceStage()
     {
         stage++;
+        if (bomb.GetStrikes() >= 2 && !trueConditions[0])
+        {
+            trueConditions[0] = true;
+            Debug.LogFormat("[Symbolic Tasha #{0}] The number of strikes has reached 2 or more. The first condition is now true.", moduleId);
+        }
+        if (cracked.Count(b => b) >= 2 && !trueConditions[1])
+        {
+            trueConditions[1] = true;
+            Debug.LogFormat("[Symbolic Tasha #{0}] The number of cracked buttons has reached 2 or more. The second condition is now true.", moduleId);
+        }
+        if (bomb.GetPortPlates().Any(x => x.Length == 0))
+            trueConditions[2] = true;
+        currentTable = Array.IndexOf(trueConditions, true);
         if (stage == 5)
         {
             module.HandlePass();
@@ -154,7 +167,7 @@ public class symbolicTasha : MonoBehaviour
         sequenceReset:
         for (int i = 0; i <= stage; i++)
         {
-            var ix = Array.IndexOf(buttonColors, flashing[i]);
+            int ix = flashing[i];
             lights[ix].enabled = true;
             if (anyBtnPressed)
                 audio.PlaySoundAtTransform(soundNames[ix], buttons[ix].transform);
@@ -168,31 +181,22 @@ public class symbolicTasha : MonoBehaviour
 
     stColor CalculateStage()
     {
-        if (Tables.symbolColumns[currentTable].Count(a => a.Contains(presentSymbols[Array.IndexOf(buttonColors, flashing[stage])])) == 0)
-            return stColor.pink;
-        else
+        Debug.LogFormat("[Symbolic Tasha #{0}] Rule being applied for Stage {1}: {2} ", moduleId, stage+1, rules[currentTable]);
+        stSymbol usingSymbol = presentSymbols[flashing[stage]];
+
+        for (var i = 0; i < 12; i++)
         {
-            var ix = Tables.symbolColumns[currentTable].IndexOf(a => a.Contains(presentSymbols[Array.IndexOf(buttonColors, flashing[stage])]));
-            return Tables.colorRows[currentTable][flashing[stage]][ix];
+            if (Tables.symbolColumns[currentTable][i].Contains(usingSymbol))
+            {
+                return Tables.colorRows[currentTable][Array.IndexOf(trueColors, buttonColors[flashing[stage]])][i];
+            }
         }
+        return stColor.pink;
     }
 
     void Update()
     {
-        if (!moduleSolved)
-        {
-            if (bomb.GetStrikes() >= 2 && !trueConditions[0])
-            {
-                trueConditions[0] = true;
-                Debug.LogFormat("[Symbolic Tasha #{0}] The number of strikes has reached 2 or more. The first condition is now true.", moduleId);
-            }
-            if (cracked.Count(b => b) >= 2 && !trueConditions[1])
-            {
-                trueConditions[1] = true;
-                Debug.LogFormat("[Symbolic Tasha #{0}] The number of cracked buttons has reached 2 or more. The second condition is now true.", moduleId);
-            }
-            currentTable = Array.IndexOf(trueConditions, true);
-        }
+
     }
 
     // Twitch Plays
