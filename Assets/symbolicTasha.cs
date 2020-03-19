@@ -236,13 +236,13 @@ public class symbolicTasha : MonoBehaviour
                 else if (btnSequence[i].Equals("left"))
                     buttons[3].OnInteract();
                 else if (btnSequence[i].Equals("pink") || btnSequence[i].Equals("p"))
-                    buttons[Array.IndexOf(buttonColors, 0)].OnInteract();
+                    buttons[Array.IndexOf(buttonColors, stColor.pink)].OnInteract();
                 else if (btnSequence[i].Equals("green") || btnSequence[i].Equals("g"))
-                    buttons[Array.IndexOf(buttonColors, 1)].OnInteract();
+                    buttons[Array.IndexOf(buttonColors, stColor.green)].OnInteract();
                 else if (btnSequence[i].Equals("yellow") || btnSequence[i].Equals("y"))
-                    buttons[Array.IndexOf(buttonColors, 2)].OnInteract();
+                    buttons[Array.IndexOf(buttonColors, stColor.yellow)].OnInteract();
                 else if (btnSequence[i].Equals("blue") || btnSequence[i].Equals("b"))
-                    buttons[Array.IndexOf(buttonColors, 3)].OnInteract();
+                    buttons[Array.IndexOf(buttonColors, stColor.blue)].OnInteract();
                 yield return new WaitForSeconds(0.1f);
             }
         }
