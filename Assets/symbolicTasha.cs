@@ -37,6 +37,7 @@ public class symbolicTasha : MonoBehaviour
     private bool anyBtnPressed;
     private bool[] flashingButtons = new bool[4];
     private Coroutine sequenceFlashing;
+    private Coroutine waiting;
 
     private static int moduleIdCounter = 1;
     private int moduleId;
@@ -102,11 +103,23 @@ public class symbolicTasha : MonoBehaviour
                 l.enabled = false;
         }
         StartCoroutine(SingleFlash(ix));
+        if (waiting != null)
+        {
+            StopCoroutine(waiting);
+            waiting = null;
+        }
+        waiting = StartCoroutine(Wait());
         if (buttonColors[ix] != solution[enteringStage])
         {
             enteringStage = 0;
             Debug.LogFormat("[Symbolic Tasha #{0}] You pressed the {1} button. That was incorrect. Strike!", moduleId, buttonColors[ix]);
+            if (waiting != null)
+            {
+                StopCoroutine(waiting);
+                waiting = null;
+            }
             module.HandleStrike();
+            StopCoroutine(sequenceFlashing);
             sequenceFlashing = StartCoroutine(SequenceFlash());
         }
         else
@@ -114,6 +127,11 @@ public class symbolicTasha : MonoBehaviour
         if (enteringStage > stage)
         {
             enteringStage = 0;
+            if (waiting != null)
+            {
+                StopCoroutine(waiting);
+                waiting = null;
+            }
             AdvanceStage();
         }
     }
@@ -138,6 +156,11 @@ public class symbolicTasha : MonoBehaviour
         {
             module.HandlePass();
             moduleSolved = true;
+            if (waiting != null)
+                StopCoroutine(waiting);
+            StopCoroutine(sequenceFlashing);
+            foreach (Light l in lights)
+                l.enabled = false;
             Debug.LogFormat("[Symbolic Tasha #{0}] Module solved!", moduleId);
         }
         else
@@ -177,6 +200,13 @@ public class symbolicTasha : MonoBehaviour
         goto sequenceReset;
     }
 
+    IEnumerator Wait()
+    {
+        yield return new WaitForSeconds(7f);
+        enteringStage = 0;
+        sequenceFlashing = StartCoroutine(SequenceFlash());
+    }
+
     stColor CalculateStage()
     {
         Debug.LogFormat("[Symbolic Tasha #{0}] Rule being applied for Stage {1}: {2} ", moduleId, stage + 1, rules[currentTable]);
@@ -191,6 +221,7 @@ public class symbolicTasha : MonoBehaviour
     #pragma warning disable 414
     private readonly string TwitchHelpMessage = "Use !{0} press [pink/blue/green/yellow] to press buttons. You can also use the first letters, or positions.";
     #pragma warning disable 414
+
     IEnumerator ProcessTwitchCommand(string cmd)
     {
         string[] acceptableWords = { "top", "right", "bottom", "left", "pink", "green", "yellow", "blue", "p", "g", "y", "b" };
@@ -236,5 +267,20 @@ public class symbolicTasha : MonoBehaviour
         }
         else
             yield break;
+    }
+
+    IEnumerator TwitchHandleForcedSolve()
+    {
+        for (int i = stage; i < 5; i++)
+        {
+            for (int j = 0; j < solution.Count; j++)
+            {
+                buttons[Array.IndexOf(buttonColors, solution[j])].OnInteract();
+                yield return new WaitForSeconds(.1f);
+            }
+            yield return true;
+            yield return new WaitForSeconds(3f);
+        }
+        yield return true;
     }
 }
