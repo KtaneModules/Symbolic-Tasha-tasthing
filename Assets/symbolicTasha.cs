@@ -271,16 +271,10 @@ public class symbolicTasha : MonoBehaviour
 
     IEnumerator TwitchHandleForcedSolve()
     {
-        for (int i = stage; i < 5; i++)
+        while (!moduleSolved)
         {
-            for (int j = 0; j < solution.Count; j++)
-            {
-                buttons[Array.IndexOf(buttonColors, solution[j])].OnInteract();
-                yield return new WaitForSeconds(.1f);
-            }
-            yield return true;
-            yield return new WaitForSeconds(3f);
+            buttons[Array.IndexOf(buttonColors, solution[enteringStage])].OnInteract();
+            yield return new WaitForSeconds(.2f);
         }
-        yield return true;
     }
 }
