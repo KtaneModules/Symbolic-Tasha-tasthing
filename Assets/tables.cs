@@ -141,8 +141,8 @@ public static class Tables
         new stColor[4][]
         {
             new stColor[12] { stColor.yellow, stColor.pink, stColor.blue, stColor.blue, stColor.blue, stColor.green, stColor.pink, stColor.pink, stColor.blue, stColor.yellow, stColor.green, stColor.pink },
-            new stColor[12] { stColor.green, stColor.yellow, stColor.yellow, stColor.pink, stColor.green, stColor.pink, stColor.green, stColor.blue, stColor.green, stColor.pink, stColor.yellow, stColor.blue },
-            new stColor[12] { stColor.blue, stColor.blue, stColor.pink, stColor.green, stColor.pink, stColor.blue, stColor.yellow, stColor.yellow, stColor.yellow, stColor.blue, stColor.pink, stColor.green },
+            new stColor[12] { stColor.green, stColor.yellow, stColor.yellow, stColor.pink, stColor.green, stColor.pink, stColor.green, stColor.blue, stColor.green, stColor.pink, stColor.pink, stColor.blue },
+            new stColor[12] { stColor.blue, stColor.blue, stColor.pink, stColor.green, stColor.pink, stColor.blue, stColor.yellow, stColor.yellow, stColor.yellow, stColor.blue, stColor.yellow, stColor.green },
             new stColor[12] { stColor.pink, stColor.green, stColor.green, stColor.yellow, stColor.yellow, stColor.yellow, stColor.blue, stColor.green, stColor.pink, stColor.green, stColor.blue, stColor.yellow }
         }
     };
