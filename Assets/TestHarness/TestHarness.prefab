@@ -20159,17 +20159,14 @@ MonoBehaviour:
   HighlightPrefab: {fileID: 100000, guid: d78a484c6e87f1b47b6596ac080fe942, type: 2}
   AudioVolume: 0.25
   AudioClips:
-  - {fileID: 8300000, guid: cb47418416b432b4e8c3c9ed707ee8a7, type: 3}
-  - {fileID: 8300000, guid: 2c0922d49102bdb40a8cf34774773276, type: 3}
-  - {fileID: 8300000, guid: 61d88357b004bbf4fa31be4ff1ae98b8, type: 3}
-  - {fileID: 8300000, guid: c916c231978b45442b092c8e0e269ead, type: 3}
-  - {fileID: 8300000, guid: 095b476b58c624c46b70e55763023a99, type: 3}
+  - {fileID: 8300000, guid: a6c7d8ea28607c049b760970df629f10, type: 3}
+  - {fileID: 8300000, guid: 5565e3d6d3a7a65419cb17b4d72e2115, type: 3}
   StrikeCount: 3
   TimeLimit: 600
   BombSize: 1
   FrontFaceOnly: 1
   EdgeworkConfiguration: {fileID: 0}
-  TwitchPlaysActive: 0
+  TwitchPlaysActive: 1
   TwitchPlaysMode: 0
   turnSpeed: 128
   panSpeed: 4
