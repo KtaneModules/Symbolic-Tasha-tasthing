@@ -55,7 +55,7 @@ GameObject:
   m_Component:
   - component: {fileID: 4502400674052068}
   m_Layer: 0
-  m_Name: BG
+  m_Name: Ancillary
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -675,7 +675,7 @@ Transform:
   m_GameObject: {fileID: 1660465996350614}
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
   m_LocalPosition: {x: 0, y: 0, z: 0}
-  m_LocalScale: {x: 0.1, y: 0.1, z: 0.1}
+  m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children: []
   m_Father: {fileID: 4502400674052068}
   m_RootOrder: 2
@@ -762,7 +762,7 @@ MeshRenderer:
   m_LightProbeUsage: 1
   m_ReflectionProbeUsage: 1
   m_Materials:
-  - {fileID: 2100000, guid: 26cdee844cb231740941635a5e5962c7, type: 2}
+  - {fileID: 2100000, guid: 47f870d12961b8b4c8f96c9979d9c509, type: 2}
   m_StaticBatchInfo:
     firstSubMesh: 0
     subMeshCount: 0
@@ -1230,7 +1230,7 @@ MeshFilter:
   m_PrefabParentObject: {fileID: 0}
   m_PrefabInternal: {fileID: 100100000}
   m_GameObject: {fileID: 1660465996350614}
-  m_Mesh: {fileID: 4300000, guid: 74f1194c9609d8b448a219f6a0390aa6, type: 3}
+  m_Mesh: {fileID: 4300000, guid: 2a7f714e18da4184989e87f460fcdea6, type: 3}
 --- !u!33 &33037088416888424
 MeshFilter:
   m_ObjectHideFlags: 1
@@ -1321,7 +1321,7 @@ MeshFilter:
   m_PrefabParentObject: {fileID: 0}
   m_PrefabInternal: {fileID: 100100000}
   m_GameObject: {fileID: 1403752040807298}
-  m_Mesh: {fileID: 4300000, guid: 1c46642b7f907d844bcdfcca8625afdd, type: 3}
+  m_Mesh: {fileID: 4300000, guid: eb301046e861a2140b13d06cb67f77d8, type: 3}
 --- !u!33 &33833279610426500
 MeshFilter:
   m_ObjectHideFlags: 1
@@ -1634,12 +1634,17 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   Parent: {fileID: 0}
   Children:
-  - {fileID: 114593157843657336}
-  - {fileID: 114103213489653526}
-  - {fileID: 114245445882528278}
+  - {fileID: 0}
   - {fileID: 114780827500461992}
+  - {fileID: 0}
+  - {fileID: 114593157843657336}
+  - {fileID: 0}
+  - {fileID: 114245445882528278}
+  - {fileID: 0}
+  - {fileID: 114103213489653526}
+  - {fileID: 0}
   IsPassThrough: 0
-  ChildRowLength: 0
+  ChildRowLength: 3
   Highlight: {fileID: 114422891262529848}
   SelectableColliders: []
   DefaultSelectableIndex: 0
