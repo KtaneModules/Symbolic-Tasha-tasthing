@@ -39,6 +39,7 @@ public class symbolicTasha : MonoBehaviour
     private Coroutine sequenceFlashing;
     private Coroutine waiting;
 
+    private bool isCorasComputer;
     private static int moduleIdCounter = 1;
     private int moduleId;
     private bool moduleSolved;
@@ -48,6 +49,8 @@ public class symbolicTasha : MonoBehaviour
         moduleId = moduleIdCounter++;
         foreach (KMSelectable button in buttons)
             button.OnInteract += delegate () { ButtonPress(button); return false; };
+        isCorasComputer = Environment.MachineName == "CREAMMACHINE";
+        Debug.LogFormat("<Symbolic Tasha #{0}> System name is {1}.", moduleId, Environment.MachineName);
     }
 
     void Start()
@@ -90,7 +93,8 @@ public class symbolicTasha : MonoBehaviour
             presentSymbols[ix] = (stSymbol)(-(int)presentSymbols[ix]);
             btnRenderers[ix].material.mainTexture = crackedTexture;
             buttonSymbols[ix].gameObject.SetActive(false);
-            audio.PlaySoundAtTransform("shatter", button.transform);
+            if (!isCorasComputer)
+                audio.PlaySoundAtTransform("shatter", button.transform);
             if (!moduleSolved)
                 Debug.LogFormat("[Symbolic Tasha #{0}] The {1} button cracked!", moduleId, buttonColors[ix]);
         }
