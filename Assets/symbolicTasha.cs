@@ -19,6 +19,7 @@ public class symbolicTasha : MonoBehaviour
     public Color[] materialColors;
     public Texture[] symbols;
     public Texture crackedTexture;
+    public TextMesh colorblindText;
 
     private int[] flashing = new int[5];
     private stSymbol[] presentSymbols = new stSymbol[4];
@@ -51,6 +52,7 @@ public class symbolicTasha : MonoBehaviour
             button.OnInteract += delegate () { ButtonPress(button); return false; };
         isCorasComputer = Environment.MachineName == "CREAMMACHINE";
         Debug.LogFormat("<Symbolic Tasha #{0}> System name is {1}.", moduleId, Environment.MachineName);
+        colorblindText.gameObject.SetActive(GetComponent<KMColorblindMode>().ColorblindModeActive);
     }
 
     void Start()
@@ -62,6 +64,8 @@ public class symbolicTasha : MonoBehaviour
             lights[i].enabled = false;
         }
         buttonColors = buttonColors.Shuffle().ToArray();
+        var letters = "IGYB".Select(x => x.ToString()).ToArray();
+        colorblindText.text = string.Format("  {0}  \n{1}    {2}\n  {3}  ", letters[(int)buttonColors[0]], letters[(int)buttonColors[3]], letters[(int)buttonColors[1]], letters[(int)buttonColors[2]]);
         soundNames = soundNames.Shuffle().ToArray();
         for (int i = 0; i < 4; i++)
         {
@@ -189,7 +193,7 @@ public class symbolicTasha : MonoBehaviour
         while (flashingButtons.Contains(true))
             yield return null;
         yield return new WaitForSeconds(1.75f);
-        sequenceReset:
+    sequenceReset:
         for (int i = 0; i <= stage; i++)
         {
             int ix = flashing[i];
@@ -222,9 +226,9 @@ public class symbolicTasha : MonoBehaviour
     }
 
     // Twitch Plays
-    #pragma warning disable 414
+#pragma warning disable 414
     private readonly string TwitchHelpMessage = "Use !{0} press [pink/blue/green/yellow] to press buttons. You can also use the first letters, or positions.";
-    #pragma warning disable 414
+#pragma warning disable 414
 
     IEnumerator ProcessTwitchCommand(string cmd)
     {

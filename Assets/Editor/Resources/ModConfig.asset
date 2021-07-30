@@ -13,10 +13,11 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   id: symbolicTasha
   title: Symbolic Tasha
+  author: 
   description: "This module is so worn down. It\u2019s forgotten because no one recalls
     of who Tasha is. Let\u2019s hope we don\u2019t have to repair the glass.\r\n\r\nModule
     idea by Pruz, implementation by TasThing.\r\n\r\nManual HTML: https://ktane.timwi.de/HTML/Symbolic%20Tasha.html\r\nManual
     PDF: https://ktane.timwi.de/PDF/Symbolic%20Tasha.pdf"
-  version: 
+  version: 1.2
   outputFolder: build
   previewImage: {fileID: 2800000, guid: 9585341756ee8914796d13fdaee369f4, type: 3}
