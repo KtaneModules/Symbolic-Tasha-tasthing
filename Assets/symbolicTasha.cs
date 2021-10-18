@@ -98,7 +98,7 @@ public class symbolicTasha : MonoBehaviour
             btnRenderers[ix].material.mainTexture = crackedTexture;
             buttonSymbols[ix].gameObject.SetActive(false);
             if (!isCorasComputer)
-                audio.PlaySoundAtTransform("shatter", button.transform);
+                audio.PlaySoundAtTransform("shatter" +rnd.Range(1, 5), button.transform);
             if (!moduleSolved)
                 Debug.LogFormat("[Symbolic Tasha #{0}] The {1} button cracked!", moduleId, buttonColors[ix]);
         }
