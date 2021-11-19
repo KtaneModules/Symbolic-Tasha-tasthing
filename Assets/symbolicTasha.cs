@@ -175,7 +175,9 @@ public class symbolicTasha : MonoBehaviour
         {
             solution.Add(CalculateStage());
             sequenceFlashing = StartCoroutine(SequenceFlash());
-            Debug.LogFormat("[Symbolic Tasha #{0}] {1} was added to the sequence of colors to press.", moduleId, solution[stage]);
+            var colorName = solution[stage].ToString();
+            var capitalizedColorName = colorName[0].ToString().ToUpperInvariant() + colorName.Substring(1);
+            Debug.LogFormat("[Symbolic Tasha #{0}] {1} was added to the sequence of colors to press.", moduleId, capitalizedColorName);
         }
     }
 

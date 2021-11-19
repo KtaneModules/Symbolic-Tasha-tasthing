@@ -18,6 +18,6 @@ MonoBehaviour:
     of who Tasha is. Let\u2019s hope we don\u2019t have to repair the glass.\r\n\r\nModule
     idea by Pruz, implementation by TasThing.\r\n\r\nManual HTML: https://ktane.timwi.de/HTML/Symbolic%20Tasha.html\r\nManual
     PDF: https://ktane.timwi.de/PDF/Symbolic%20Tasha.pdf"
-  version: 1.2.1
+  version: 1.2.2
   outputFolder: build
   previewImage: {fileID: 2800000, guid: 9585341756ee8914796d13fdaee369f4, type: 3}
